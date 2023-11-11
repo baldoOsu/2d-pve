@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class Player : CharacterBody2D
 {
@@ -16,13 +17,16 @@ public partial class Player : CharacterBody2D
 	public const float Speed = 8500.0f;
 	private Direction dir = Direction.Front;
   private Texture[] crosshairs = { null, null };
+  private Viewport viewport;
+
+  private static double BULLET_CD_RESET_TIMER = 0.15;
+  private double bulletCd = -1.0;
 
 	public override void _Ready()
 	{
-    
-    this.InitCrosshairAnim();
-		//this.anim = GetNode<AnimatedSprite2D>("./Movement");
-		//this.anim.Play("front_idle");
+	  this.InitCrosshairAnim();
+		this.anim = GetNode<AnimatedSprite2D>("./Movement");
+		this.anim.Play("front_idle");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -42,12 +46,24 @@ public partial class Player : CharacterBody2D
 			velocity.Y = 0;
 		}
 
-		//this.PlayAnim(this.VecToMovement(velocity));
-		this.Velocity = velocity;
-		MoveAndSlide();
+    Vector2 globalMousePos = this.GetGlobalMousePosition();
+    this.SetDir(globalMousePos);
+
+    this.bulletCd -= delta;
+    bool isShooting = Input.IsActionPressed("shoot");
+    if (isShooting && this.bulletCd < 0) {
+      this.Shoot(this.GlobalTransform.Origin, globalMousePos);
+    }
+
+    
+
+    this.PlayAnim(this.VecToMovement(velocity), isShooting);
+
+    this.Velocity = velocity;
+    MoveAndSlide();
 	}
 
-	private void PlayAnim(string movement)
+	private void PlayAnim(string movement, bool isShooting)
 	{
 		switch (this.dir)
 		{
@@ -59,7 +75,12 @@ public partial class Player : CharacterBody2D
 				this.anim.FlipH = false;
 				break;
 		}
-		this.anim.Play(DirectionTable[(int)this.dir] + movement);
+	if (isShooting) {
+	  this.anim.Play("shoot");
+	  return;
+	}
+		this.anim.Play("front_" + movement);
+		// this.anim.Play(DirectionTable[(int)this.dir] + movement);
 	}
 
 	private string VecToMovement(Vector2 vec)
@@ -69,32 +90,73 @@ public partial class Player : CharacterBody2D
 			return "idle";
 		}
 
+	return "idle";
 
-		if (vec.X > 0)
-		{
-			this.dir = Direction.Right;
-			return "walk";
-		}
-		else if (vec.X < 0)
-		{
-			this.dir = Direction.Left;
-			return "walk";
-		}
 
-		if (vec.Y > 0)
-		{
-			this.dir = Direction.Front;
-			return "walk";
-		}
-		else if (vec.Y < 0)
-		{
-			this.dir = Direction.Back;
-			return "walk";
-		}
+		// if (vec.X > 0)
+		// {
+		// 	this.dir = Direction.Right;
+		// 	return "walk";
+		// }
+		// else if (vec.X < 0)
+		// {
+		// 	this.dir = Direction.Left;
+		// 	return "walk";
+		// }
 
-		// should never happen, but the compiler is a bit stupid
-		return "";
+		// if (vec.Y > 0)
+		// {
+		// 	this.dir = Direction.Front;
+		// 	return "walk";
+		// }
+		// else if (vec.Y < 0)
+		// {
+		// 	this.dir = Direction.Back;
+		// 	return "walk";
+		// }
+
 	}
+
+  private void SetDir(Vector2 globalMousePos) {
+    if ((globalMousePos.X - this.Position.X) > 0) {
+      this.dir = Direction.Right;
+      return;
+    }
+
+    this.dir = Direction.Left;
+  }
+
+  private void Shoot(Vector2 startPos, Vector2 dir) {
+    var spaceState = GetWorld2D().DirectSpaceState;
+
+    // det her gør så man ikke kan skyde igennem vægge
+    var RayQuery = PhysicsRayQueryParameters2D.Create(startPos, dir);
+    var RayResult = spaceState.IntersectRay(RayQuery);
+
+    Variant val = new();
+    StaticBody2D cbVal = val.As<StaticBody2D>();
+    RayResult.TryGetValue("collider", out val);
+    try {
+      cbVal = val.As<StaticBody2D>();
+    } catch {
+      return;
+    }
+
+    if (cbVal?.HasMeta("Enemy_Hitbox") == false)
+      return;
+
+    // det her gør så man skal have crosshair på enemy hitbox for at kunne ramme
+    // hvis man bruger raycast alene, kan man ramme selv med crosshair bag enemy
+    var PointQuery = new PhysicsPointQueryParameters2D();
+    PointQuery.Position = dir;
+    var PointResult = spaceState.IntersectPoint(PointQuery);
+    if (PointResult.Count == 0)
+      return;
+    PointResult[0].TryGetValue("collider", out val);
+
+    cbVal?.GetParent().Free();
+    this.bulletCd = BULLET_CD_RESET_TIMER;
+  }
 
   private void InitCrosshairAnim() {
     this.crosshairs[0] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-0.png");
@@ -105,7 +167,7 @@ public partial class Player : CharacterBody2D
   }
 
   public void SetMouseCursor() {
-    Input.SetCustomMouseCursor(this.crosshairs[0]);
-    (this.crosshairs[0], this.crosshairs[1]) = (this.crosshairs[1], this.crosshairs[0]);
+	  Input.SetCustomMouseCursor(this.crosshairs[0], default, new Vector2(17, 17));
+	  (this.crosshairs[0], this.crosshairs[1]) = (this.crosshairs[1], this.crosshairs[0]);
   }
 }

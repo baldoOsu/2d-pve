@@ -7,17 +7,16 @@ public partial class Muteret_mand : CharacterBody2D
   public const float JumpVelocity = -400.0f;
   private CharacterBody2D playerObj;
   public override void _Ready()
-    {
-      base._Ready();
-      this.playerObj = GetNode<CharacterBody2D>("/root/Root/Map/Player");
-      GD.Print(this.playerObj.GetPath());
-    }
+	{
+	  base._Ready();
+	  this.playerObj = GetNode<CharacterBody2D>("/root/Root/Map/Player");
+	}
 
   public override void _PhysicsProcess(double delta)
   {
-    Vector2 direction = this.playerObj.Position - this.Position;
+	Vector2 direction = this.playerObj.Position - this.Position;
 
-    this.Velocity = direction.Normalized() * Muteret_mand.Speed;
-    MoveAndSlide();
+	this.Velocity = direction.Normalized() * Muteret_mand.Speed;
+	MoveAndSlide();
   }
 }

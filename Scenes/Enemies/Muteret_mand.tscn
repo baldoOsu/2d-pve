@@ -18,6 +18,7 @@ animations = [{
 radius = 4.0
 
 [node name="Muteret_mand" type="CharacterBody2D"]
+collision_priority = 2.0
 script = ExtResource("1_4any4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -27,3 +28,10 @@ sprite_frames = SubResource("SpriteFrames_eurwa")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_b3fdv")
+
+[node name="RigidBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+metadata/Enemy_Hitbox = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
+polygon = PackedVector2Array(6, -1, -6, -1, -6, -4, -4, -7, -5, -11, -8, -11, -8, -21, -4, -23, -5, -25, -5, -28, -3, -31, 3, -31, 5, -28, 5, -25, 4, -23, 7, -21, 8, -18, 8, -11, 4, -11, 6, -4)
