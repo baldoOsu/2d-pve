@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://btnpinanbw1ud"]
+
+[ext_resource type="Script" path="res://Scripts/Enemies/Muteret_mand.cs" id="1_4any4"]
+[ext_resource type="Texture2D" uid="uid://mlipsep2bmyt" path="res://Assets/Characters/muteret_menneske.png" id="2_mitak"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_eurwa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_mitak")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b3fdv"]
+radius = 4.0
+
+[node name="Muteret_mand" type="CharacterBody2D"]
+script = ExtResource("1_4any4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_eurwa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_b3fdv")

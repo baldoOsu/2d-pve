@@ -31,9 +31,17 @@ position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_wnrep")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(95, 320)
+position = Vector2(0, -13)
+zoom = Vector2(2, 2)
 limit_left = 0
 limit_top = 0
-limit_right = 816
-limit_bottom = 0
+limit_right = 1152
+limit_bottom = 640
 limit_smoothed = true
+rotation_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.0
+drag_top_margin = 0.0
+drag_right_margin = 0.0
+drag_bottom_margin = 0.0

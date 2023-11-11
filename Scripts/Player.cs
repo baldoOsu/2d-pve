@@ -13,7 +13,7 @@ public partial class Player : CharacterBody2D
 	}
 	public static readonly string[] DirectionTable = { "front_", "side_", "side_", "back_" };
 
-	public const float Speed = 4500.0f;
+	public const float Speed = 8500.0f;
 	private Direction dir = Direction.Front;
 
 	public override void _Ready()
