@@ -15,9 +15,12 @@ public partial class Player : CharacterBody2D
 
 	public const float Speed = 8500.0f;
 	private Direction dir = Direction.Front;
+  private Texture[] crosshairs = { null, null };
 
 	public override void _Ready()
 	{
+    
+    this.InitCrosshairAnim();
 		//this.anim = GetNode<AnimatedSprite2D>("./Movement");
 		//this.anim.Play("front_idle");
 	}
@@ -92,4 +95,17 @@ public partial class Player : CharacterBody2D
 		// should never happen, but the compiler is a bit stupid
 		return "";
 	}
+
+  private void InitCrosshairAnim() {
+    this.crosshairs[0] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-0.png");
+    this.crosshairs[1] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-1.png");
+    var timer = new System.Threading.Timer((object state) => {
+      this.CallDeferred("SetMouseCursor", null);
+    }, null, 0, 300);
+  }
+
+  public void SetMouseCursor() {
+    Input.SetCustomMouseCursor(this.crosshairs[0]);
+    (this.crosshairs[0], this.crosshairs[1]) = (this.crosshairs[1], this.crosshairs[0]);
+  }
 }
