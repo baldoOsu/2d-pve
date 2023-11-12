@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://k5n2fwy463vy"]
+[gd_scene load_steps=3 format=3 uid="uid://k5n2fwy463vy"]
 
 [ext_resource type="PackedScene" uid="uid://do4m40qojtawm" path="res://Scenes/Map.tscn" id="1_cfea0"]
+[ext_resource type="AudioStream" uid="uid://kdh0xr5r8dnn" path="res://Assets/baggrund.mp3" id="2_5r41h"]
 
 [node name="Root" type="Node2D"]
 y_sort_enabled = true
 
 [node name="Map" parent="." instance=ExtResource("1_cfea0")]
+
+[node name="Background Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_5r41h")
+volume_db = -20.0
+autoplay = true

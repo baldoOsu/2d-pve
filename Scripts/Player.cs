@@ -5,6 +5,7 @@ using System.Linq;
 public partial class Player : CharacterBody2D
 {
 	private AnimatedSprite2D anim;
+  private AudioStreamPlayer2D skudPlayer;
 	public enum Direction
 	{
 		Front,
@@ -25,6 +26,7 @@ public partial class Player : CharacterBody2D
 	public override void _Ready()
 	{
 	  this.InitCrosshairAnim();
+    this.skudPlayer = GetNode<AudioStreamPlayer2D>("./Skud");
 		this.anim = GetNode<AnimatedSprite2D>("./Movement");
 		this.anim.Play("front_idle");
 	}
@@ -125,6 +127,9 @@ public partial class Player : CharacterBody2D
   }
 
   private void Shoot(Vector2 startPos, Vector2 dir) {
+    this.bulletCd = BULLET_CD_RESET_TIMER;
+
+    this.skudPlayer.Play();
     var spaceState = GetWorld2D().DirectSpaceState;
 
     // det her gør så man ikke kan skyde igennem generators
@@ -138,7 +143,6 @@ public partial class Player : CharacterBody2D
     try {
       cbVal = val.As<StaticBody2D>();
     } catch {
-      GD.Print("returning");
       return;
     }
 
@@ -155,7 +159,6 @@ public partial class Player : CharacterBody2D
     PointResult[0].TryGetValue("collider", out val);
 
     cbVal?.GetParent().Free();
-    this.bulletCd = BULLET_CD_RESET_TIMER;
   }
 
   private void InitCrosshairAnim() {
