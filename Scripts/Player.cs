@@ -86,11 +86,9 @@ public partial class Player : CharacterBody2D
 	private string VecToMovement(Vector2 vec)
 	{
 		if (vec.X == 0 && vec.Y == 0)
-		{
 			return "idle";
-		}
 
-	return "idle";
+	  return "idle";
 
 
 		// if (vec.X > 0)
@@ -129,8 +127,9 @@ public partial class Player : CharacterBody2D
   private void Shoot(Vector2 startPos, Vector2 dir) {
     var spaceState = GetWorld2D().DirectSpaceState;
 
-    // det her gør så man ikke kan skyde igennem vægge
-    var RayQuery = PhysicsRayQueryParameters2D.Create(startPos, dir);
+    // det her gør så man ikke kan skyde igennem generators
+    // 6 er bit mask til 2, 3 collision layers (0b110)
+    var RayQuery = PhysicsRayQueryParameters2D.Create(startPos, dir, 6);
     var RayResult = spaceState.IntersectRay(RayQuery);
 
     Variant val = new();
@@ -139,6 +138,7 @@ public partial class Player : CharacterBody2D
     try {
       cbVal = val.As<StaticBody2D>();
     } catch {
+      GD.Print("returning");
       return;
     }
 
