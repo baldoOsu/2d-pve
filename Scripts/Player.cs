@@ -6,6 +6,7 @@ public partial class Player : CharacterBody2D
 {
 	private AnimatedSprite2D anim;
   private AudioStreamPlayer2D skudPlayer;
+  private Global global;
 	public enum Direction
 	{
 		Front,
@@ -26,6 +27,7 @@ public partial class Player : CharacterBody2D
 	public override void _Ready()
 	{
 	  this.InitCrosshairAnim();
+    this.global = GetNode<Global>("/root/Global");
     this.skudPlayer = GetNode<AudioStreamPlayer2D>("./Skud");
 		this.anim = GetNode<AnimatedSprite2D>("./Movement");
 		this.anim.Play("front_idle");
@@ -158,7 +160,8 @@ public partial class Player : CharacterBody2D
       return;
     PointResult[0].TryGetValue("collider", out val);
 
-    cbVal?.GetParent().Free();
+    cbVal.GetParent().Free();
+    this.global.IncrementScore();
   }
 
   private void InitCrosshairAnim() {

@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://g3go1sqg5l0a"]
+[gd_scene load_steps=16 format=3 uid="uid://g3go1sqg5l0a"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_882hj"]
 [ext_resource type="Texture2D" uid="uid://c04cwsjo6nwab" path="res://Assets/Characters/player-sprite.png" id="2_tqq2y"]
 [ext_resource type="Texture2D" uid="uid://dy5k4vropgj4m" path="res://Assets/Characters/character_sideway_shoot.png" id="3_ei8ph"]
 [ext_resource type="AudioStream" uid="uid://dynd5bda4b2sg" path="res://Assets/skud.wav" id="4_b4l15"]
+[ext_resource type="PackedScene" uid="uid://c532kluoet1m3" path="res://Scenes/GUI.tscn" id="5_63efj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_42e8b"]
 atlas = ExtResource("2_tqq2y")
@@ -112,3 +113,7 @@ drag_bottom_margin = 0.0
 [node name="Skud" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_b4l15")
 volume_db = -10.0
+
+[node name="UICanvas" type="CanvasLayer" parent="."]
+
+[node name="GUI" parent="UICanvas" instance=ExtResource("5_63efj")]
