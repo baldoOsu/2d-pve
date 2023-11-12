@@ -1,10 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://g3go1sqg5l0a"]
+[gd_scene load_steps=18 format=3 uid="uid://g3go1sqg5l0a"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_882hj"]
 [ext_resource type="Texture2D" uid="uid://c04cwsjo6nwab" path="res://Assets/Characters/player-sprite.png" id="2_tqq2y"]
 [ext_resource type="Texture2D" uid="uid://dy5k4vropgj4m" path="res://Assets/Characters/character_sideway_shoot.png" id="3_ei8ph"]
 [ext_resource type="AudioStream" uid="uid://dynd5bda4b2sg" path="res://Assets/skud.wav" id="4_b4l15"]
 [ext_resource type="PackedScene" uid="uid://c532kluoet1m3" path="res://Scenes/GUI.tscn" id="5_63efj"]
+[ext_resource type="Texture2D" uid="uid://dnhwx71n2e16t" path="res://Assets/HP_Under.png" id="6_po6a5"]
+[ext_resource type="Texture2D" uid="uid://bm6nmvgnyjnoc" path="res://Assets/HP_Over.png" id="7_y8e7p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_42e8b"]
 atlas = ExtResource("2_tqq2y")
@@ -81,14 +83,13 @@ radius = 5.0
 
 [node name="Player" type="CharacterBody2D"]
 y_sort_enabled = true
-collision_mask = 5
+collision_layer = 9
 script = ExtResource("1_882hj")
 
 [node name="Movement" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_x027g")
 animation = &"shoot"
-frame_progress = 0.68295
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
@@ -117,3 +118,21 @@ volume_db = -10.0
 [node name="UICanvas" type="CanvasLayer" parent="."]
 
 [node name="GUI" parent="UICanvas" instance=ExtResource("5_63efj")]
+
+[node name="HPBar" type="TextureProgressBar" parent="."]
+offset_left = -14.0
+offset_top = 2.0
+offset_right = 14.0
+offset_bottom = 8.0
+step = 5.0
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 3
+stretch_margin_top = 3
+stretch_margin_right = 3
+stretch_margin_bottom = 3
+texture_under = ExtResource("6_po6a5")
+texture_over = ExtResource("7_y8e7p")
+texture_progress = ExtResource("6_po6a5")
+tint_under = Color(0.109804, 0.0431373, 0.0431373, 1)
+tint_progress = Color(0.176471, 1, 0.152941, 1)

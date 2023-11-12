@@ -1,12 +1,18 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Threading;
 
 public partial class Player : CharacterBody2D
 {
+  private Viewport viewport;
+  private Texture[] crosshairs = { null, null };
 	private AnimatedSprite2D anim;
   private AudioStreamPlayer2D skudPlayer;
+  private TextureProgressBar HPBar;
   private Global global;
+  private System.Threading.Timer crosshairAnimTimer;
+
 	public enum Direction
 	{
 		Front,
@@ -18,19 +24,29 @@ public partial class Player : CharacterBody2D
 
 	public const float Speed = 8500.0f;
 	private Direction dir = Direction.Front;
-  private Texture[] crosshairs = { null, null };
-  private Viewport viewport;
 
   private static double BULLET_CD_RESET_TIMER = 0.15;
   private double bulletCd = -1.0;
+  private int _hp = 100;
+  public int HP
+  { 
+    get { return _hp; }
+    set {
+      this._hp = value;
+      this.HPBar.Value = this._hp;
+    }
+  }
 
 	public override void _Ready()
 	{
 	  this.InitCrosshairAnim();
     this.global = GetNode<Global>("/root/Global");
+    this.HPBar = GetNode<TextureProgressBar>("./HPBar");
     this.skudPlayer = GetNode<AudioStreamPlayer2D>("./Skud");
 		this.anim = GetNode<AnimatedSprite2D>("./Movement");
+
 		this.anim.Play("front_idle");
+    this.global.RenderScore();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -164,10 +180,19 @@ public partial class Player : CharacterBody2D
     this.global.IncrementScore();
   }
 
+  public void Damage(int val) {
+    this.HP -= val;
+
+    if (this.HP < 1)
+      global.ResetGame();
+  }
+
   private void InitCrosshairAnim() {
+    GD.Print("Initializing crosshair animation");
+
     this.crosshairs[0] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-0.png");
     this.crosshairs[1] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-1.png");
-    var timer = new System.Threading.Timer((object state) => {
+    this.crosshairAnimTimer = new System.Threading.Timer((object state) => {
       this.CallDeferred("SetMouseCursor", null);
     }, null, 0, 300);
   }
@@ -175,5 +200,10 @@ public partial class Player : CharacterBody2D
   public void SetMouseCursor() {
 	  Input.SetCustomMouseCursor(this.crosshairs[0], default, new Vector2(17, 17));
 	  (this.crosshairs[0], this.crosshairs[1]) = (this.crosshairs[1], this.crosshairs[0]);
+  }
+
+  public void DestroyCrosshairAnimTimer() {
+    GD.Print("Destroying crosshair animation timer");
+    this.crosshairAnimTimer.Dispose();
   }
 }

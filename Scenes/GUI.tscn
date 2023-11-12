@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://c532kluoet1m3"]
+[gd_scene load_steps=2 format=3 uid="uid://c532kluoet1m3"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_i4ajq"]
+font_size = 30
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -13,4 +16,5 @@ layout_mode = 0
 offset_left = 9.0
 offset_right = 49.0
 offset_bottom = 26.0
-text = "0 / 0"
+text = "0 \\ 0"
+label_settings = SubResource("LabelSettings_i4ajq")
