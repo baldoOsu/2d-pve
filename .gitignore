@@ -1,2 +1,4 @@
 # Godot 4+ specific ignores
-.godot/
+game/.godot/
+*.env
+backend/node_modules/
