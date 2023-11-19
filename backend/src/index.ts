@@ -14,8 +14,7 @@ app.post("/users/signup", async (req, res) => {
   const { username, password } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const query = 
-  `
+  const query = `
     INSERT INTO users (username, password)
     SELECT $1::varchar, $2::varchar
     WHERE NOT EXISTS (
@@ -28,7 +27,7 @@ app.post("/users/signup", async (req, res) => {
         res.status(201).send();
         return;
       }
-      
+
       res.status(401).send("User already exists");
     })
     .catch((err) => {
@@ -40,9 +39,8 @@ app.post("/users/signup", async (req, res) => {
 app.post("/users/login", async (req, res) => {
   const { username, password } = req.body;
 
-  const query = 
-  `
-    SELECT password
+  const query = `
+    SELECT (password, highscore, games_played)
     FROM users
     WHERE username = $1::varchar;
   `;
@@ -54,10 +52,20 @@ app.post("/users/login", async (req, res) => {
     return;
   }
 
-  console.log(result);
-  const isCorrectPw = await bcrypt.compare(password, result.rows[0].password);
+  let [dbPassword, dbHighscore, dbGamesPlayed] = result.rows[0].row
+    .replace("(", "")
+    .replace(")", "")
+    .split(",");
+
+  dbHighscore = parseInt(dbHighscore);
+  dbGamesPlayed = parseInt(dbGamesPlayed);
+
+  const isCorrectPw = await bcrypt.compare(password, dbPassword);
   if (isCorrectPw) {
-    res.status(200).send();
+    res.status(200).send({
+      highscore: dbHighscore,
+      gamesPlayed: dbGamesPlayed,
+    });
     return;
   }
 

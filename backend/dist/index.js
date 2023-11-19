@@ -24,11 +24,12 @@ app.use(express_1.default.json());
 app.post("/users/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-    const query = `INSERT INTO users (username, password)
-  SELECT $1::varchar, $2::varchar
-  WHERE NOT EXISTS (
-    SELECT 1 FROM users WHERE username = $1::varchar
-  );`;
+    const query = `
+    INSERT INTO users (username, password)
+    SELECT $1::varchar, $2::varchar
+    WHERE NOT EXISTS (
+      SELECT 1 FROM users WHERE username = $1::varchar
+    );`;
     db.query(query, [username, hashedPassword])
         .then((queryRes) => {
         if (queryRes.rowCount === 1) {
@@ -44,19 +45,28 @@ app.post("/users/signup", (req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 app.post("/users/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
-    const result = yield db.query(`
-    SELECT password
+    const query = `
+    SELECT (password, highscore, games_played)
     FROM users
     WHERE username = $1::varchar;
-  `, [username]);
+  `;
+    const result = yield db.query(query, [username]);
     if (result.rows.length === 0) {
         res.status(401).send("Username not found");
         return;
     }
-    console.log(result);
-    const isCorrectPw = yield bcrypt_1.default.compare(password, result.rows[0].password);
+    let [dbPassword, dbHighscore, dbGamesPlayed] = result.rows[0].row
+        .replace("(", "")
+        .replace(")", "")
+        .split(",");
+    dbHighscore = parseInt(dbHighscore);
+    dbGamesPlayed = parseInt(dbGamesPlayed);
+    const isCorrectPw = yield bcrypt_1.default.compare(password, dbPassword);
     if (isCorrectPw) {
-        res.status(200).send();
+        res.status(200).send({
+            highscore: dbHighscore,
+            gamesPlayed: dbGamesPlayed,
+        });
         return;
     }
     res.status(401).send();
