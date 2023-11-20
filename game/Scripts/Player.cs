@@ -30,23 +30,23 @@ public partial class Player : CharacterBody2D
   private int _hp = 100;
   public int HP
   { 
-	get { return _hp; }
-	set {
-	  this._hp = value;
-	  this.HPBar.Value = this._hp;
-	}
+    get { return _hp; }
+    set {
+      this._hp = value;
+      this.HPBar.Value = this._hp;
+    }
   }
 
 	public override void _Ready()
 	{
 	  this.InitCrosshairAnim();
-	this.global = GetNode<Global>("/root/Global");
-	this.HPBar = GetNode<TextureProgressBar>("./HPBar");
-	this.skudPlayer = GetNode<AudioStreamPlayer2D>("./Skud");
-		this.anim = GetNode<AnimatedSprite2D>("./Movement");
+    this.global = GetNode<Global>("/root/Global");
+    this.HPBar = GetNode<TextureProgressBar>("./HPBar");
+    this.skudPlayer = GetNode<AudioStreamPlayer2D>("./Skud");
+    this.anim = GetNode<AnimatedSprite2D>("./Movement");
 
 		this.anim.Play("front_idle");
-	this.global.RenderScore();
+	  this.global.RenderScore();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -66,13 +66,13 @@ public partial class Player : CharacterBody2D
 			velocity.Y = 0;
 		}
 
-	Vector2 globalMousePos = this.GetGlobalMousePosition();
-	this.SetDir(globalMousePos);
+    Vector2 globalMousePos = this.GetGlobalMousePosition();
+    this.SetDir(globalMousePos);
 
-	this.bulletCd -= delta;
-	bool isShooting = Input.IsActionPressed("shoot");
-	if (isShooting && this.bulletCd < 0) {
-	  this.Shoot(this.GlobalTransform.Origin, globalMousePos);
+    this.bulletCd -= delta;
+    bool isShooting = Input.IsActionPressed("shoot");
+    if (isShooting && this.bulletCd < 0) {
+      this.Shoot(this.GlobalTransform.Origin, globalMousePos);
 	}
 
 	
@@ -145,56 +145,56 @@ public partial class Player : CharacterBody2D
   }
 
   private void Shoot(Vector2 startPos, Vector2 dir) {
-	this.bulletCd = BULLET_CD_RESET_TIMER;
+    this.bulletCd = BULLET_CD_RESET_TIMER;
 
-	this.skudPlayer.Play();
-	var spaceState = GetWorld2D().DirectSpaceState;
+    this.skudPlayer.Play();
+    var spaceState = GetWorld2D().DirectSpaceState;
 
-	// det her gør så man ikke kan skyde igennem generators
-	// 6 er bit mask til 2, 3 collision layers (0b110)
-	var RayQuery = PhysicsRayQueryParameters2D.Create(startPos, dir, 6);
-	var RayResult = spaceState.IntersectRay(RayQuery);
+    // det her gør så man ikke kan skyde igennem generators
+    // 6 er bit mask til 2, 3 collision layers (0b110)
+    var RayQuery = PhysicsRayQueryParameters2D.Create(startPos, dir, 6);
+    var RayResult = spaceState.IntersectRay(RayQuery);
 
-	Variant val = new();
-	StaticBody2D cbVal = val.As<StaticBody2D>();
-	RayResult.TryGetValue("collider", out val);
-	try {
-	  cbVal = val.As<StaticBody2D>();
-	} catch {
-	  return;
-	}
+    Variant val = new();
+    StaticBody2D cbVal = val.As<StaticBody2D>();
+    RayResult.TryGetValue("collider", out val);
+    try {
+      cbVal = val.As<StaticBody2D>();
+    } catch {
+      return;
+    }
 
-	if (cbVal?.HasMeta("Enemy_Hitbox") == false)
-	  return;
+    if (cbVal?.HasMeta("Enemy_Hitbox") == false)
+      return;
 
-	// det her gør så man skal have crosshair på enemy hitbox for at kunne ramme
-	// hvis man bruger raycast alene, kan man ramme selv med crosshair bag enemy
-	var PointQuery = new PhysicsPointQueryParameters2D();
-	PointQuery.Position = dir;
-	var PointResult = spaceState.IntersectPoint(PointQuery);
-	if (PointResult.Count == 0)
-	  return;
-	PointResult[0].TryGetValue("collider", out val);
+    // det her gør så man skal have crosshair på enemy hitbox for at kunne ramme
+    // hvis man bruger raycast alene, kan man ramme selv med crosshair bag enemy
+    var PointQuery = new PhysicsPointQueryParameters2D();
+    PointQuery.Position = dir;
+    var PointResult = spaceState.IntersectPoint(PointQuery);
+    if (PointResult.Count == 0)
+      return;
+    PointResult[0].TryGetValue("collider", out val);
 
-	cbVal.GetParent().Free();
-	this.global.IncrementScore();
+    cbVal.GetParent().Free();
+    this.global.IncrementScore();
   }
 
   public void Damage(int val) {
-	this.HP -= val;
+    this.HP -= val;
 
-	if (this.HP < 1)
-	  global.ResetGame();
+    if (this.HP < 1)
+      global.ResetGame();
   }
 
   private void InitCrosshairAnim() {
-	GD.Print("Initializing crosshair animation");
+    GD.Print("Initializing crosshair animation");
 
-	this.crosshairs[0] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-0.png");
-	this.crosshairs[1] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-1.png");
-	this.crosshairAnimTimer = new System.Threading.Timer((object state) => {
-	  this.CallDeferred("SetMouseCursor", null);
-	}, null, 0, 300);
+    this.crosshairs[0] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-0.png");
+    this.crosshairs[1] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-1.png");
+    this.crosshairAnimTimer = new System.Threading.Timer((object state) => {
+      this.CallDeferred("SetMouseCursor", null);
+    }, null, 0, 300);
   }
 
   public void SetMouseCursor() {
@@ -203,7 +203,7 @@ public partial class Player : CharacterBody2D
   }
 
   public void DestroyCrosshairAnimTimer() {
-	GD.Print("Destroying crosshair animation timer");
-	this.crosshairAnimTimer.Dispose();
+    GD.Print("Destroying crosshair animation timer");
+    this.crosshairAnimTimer.Dispose();
   }
 }

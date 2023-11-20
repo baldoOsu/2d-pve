@@ -2,12 +2,14 @@ import "dotenv/config";
 import { NextFunction, Request, Response } from "express";
 import JWT from "jsonwebtoken";
 
-const secret = Bun.env.ACCESS_TOKEN_SECRET!;
-export function signAccessToken(username: string) {
+const secret = process.env.ACCESS_TOKEN_SECRET!;
+export function signAccessToken(id: number, username: string) {
   return new Promise((resolve, reject) => {
-    const payload = {};
+    const payload = {
+      id,
+    };
     const options = {
-      expiresIn: "1d",
+      expiresIn: "90d",
       audience: username,
     };
 
@@ -42,7 +44,6 @@ export function verifyAccessToken(
         message: "Something went wrong at verifying access token",
       });
     }
-
     // så jeg kan modificere request
     // @ts-ignore
     req.payload = payload;

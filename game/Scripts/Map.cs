@@ -6,7 +6,7 @@ using System.Threading;
 public partial class Map : Node2D
 {
 
-  private const float enemySpawnDistance = 200.0f;
+  private const float ENEMY_SPAWN_DISTANCE = 200.0f;
   private static Vector4 ENEMY_SPAWN_BOUNDARY = new(10, 25, 1142, 630);
   private System.Threading.Timer enemySpawnTimer;
   private PackedScene enemyScene;
@@ -42,7 +42,7 @@ public partial class Map : Node2D
   private Vector2 GetSpawnPoint(Vector2 playerPos) {
     double v = randomizer.NextDouble() * 2 * Math.PI;
     
-    Vector2 spawnPoint = new Vector2(playerPos.X + enemySpawnDistance * (float)Math.Cos(v), playerPos.Y + enemySpawnDistance * (float)Math.Sin(v));
+    Vector2 spawnPoint = new Vector2(playerPos.X + ENEMY_SPAWN_DISTANCE * (float)Math.Cos(v), playerPos.Y + ENEMY_SPAWN_DISTANCE * (float)Math.Sin(v));
 
 
     if (spawnPoint.X < ENEMY_SPAWN_BOUNDARY.X)

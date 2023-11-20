@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://g4l8w3gaoxa0"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Menu.cs" id="1_krftg"]
+[ext_resource type="Script" path="res://Scripts/UI/Play.cs" id="1_nxvcm"]
+[ext_resource type="Script" path="res://Scripts/UI/Goto_Login.cs" id="2_45it0"]
+[ext_resource type="Script" path="res://Scripts/UI/Goto_Signup.cs" id="4_ef7jb"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_krftg")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -160.0
+offset_right = 120.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BtnsMargin" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 575.0
+offset_bottom = 320.0
+scale = Vector2(2, 2)
+
+[node name="BtnsVBox" type="VBoxContainer" parent="BtnsMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Play" type="Button" parent="BtnsMargin/BtnsVBox"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Play"
+icon_alignment = 1
+script = ExtResource("1_nxvcm")
+
+[node name="Log In" type="Button" parent="BtnsMargin/BtnsVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Log In"
+script = ExtResource("2_45it0")
+
+[node name="Sign Up" type="Button" parent="BtnsMargin/BtnsVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Sign Up"
+script = ExtResource("4_ef7jb")

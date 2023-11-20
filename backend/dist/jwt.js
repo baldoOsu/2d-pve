@@ -6,12 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyAccessToken = exports.signAccessToken = void 0;
 require("dotenv/config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const secret = Bun.env.ACCESS_TOKEN_SECRET;
-function signAccessToken(username) {
+const secret = process.env.ACCESS_TOKEN_SECRET;
+function signAccessToken(id, username) {
     return new Promise((resolve, reject) => {
-        const payload = {};
+        const payload = {
+            id,
+        };
         const options = {
-            expiresIn: "1d",
+            expiresIn: "90d",
             audience: username,
         };
         jsonwebtoken_1.default.sign(payload, secret, options, (err, token) => {
