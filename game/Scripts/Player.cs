@@ -15,35 +15,35 @@ public partial class Player : CharacterBody2D
 
 	public enum Direction
 	{
-		Front,
+		Down,
 		Right,
 		Left,
-		Back
+		Up
 	}
-	public static readonly string[] DirectionTable = { "front_", "side_", "side_", "back_" };
+	public static readonly string[] DirectionTable = { "up_", "side_", "side_", "front_" };
 
 	public const float Speed = 8500.0f;
-	private Direction dir = Direction.Front;
+	private Direction dir = Direction.Down;
 
   private static double BULLET_CD_RESET_TIMER = 0.15;
   private double bulletCd = -1.0;
   private int _hp = 100;
   public int HP
   { 
-    get { return _hp; }
-    set {
-      this._hp = value;
-      this.HPBar.Value = this._hp;
-    }
+	get { return _hp; }
+	set {
+	  this._hp = value;
+	  this.HPBar.Value = this._hp;
+	}
   }
 
 	public override void _Ready()
 	{
 	  this.InitCrosshairAnim();
-    this.global = GetNode<Global>("/root/Global");
-    this.HPBar = GetNode<TextureProgressBar>("./HPBar");
-    this.skudPlayer = GetNode<AudioStreamPlayer2D>("./Skud");
-    this.anim = GetNode<AnimatedSprite2D>("./Movement");
+	this.global = GetNode<Global>("/root/Global");
+	this.HPBar = GetNode<TextureProgressBar>("./HPBar");
+	this.skudPlayer = GetNode<AudioStreamPlayer2D>("./Skud");
+	this.anim = GetNode<AnimatedSprite2D>("./Movement");
 
 		this.anim.Play("front_idle");
 	  this.global.RenderScore();
@@ -66,18 +66,19 @@ public partial class Player : CharacterBody2D
 			velocity.Y = 0;
 		}
 
-    Vector2 globalMousePos = this.GetGlobalMousePosition();
-    this.SetDir(globalMousePos);
+	
 
-    this.bulletCd -= delta;
-    bool isShooting = Input.IsActionPressed("shoot");
-    if (isShooting && this.bulletCd < 0) {
-      this.Shoot(this.GlobalTransform.Origin, globalMousePos);
+	this.bulletCd -= delta;
+	bool isShooting = Input.IsActionPressed("shoot");
+	if (isShooting && this.bulletCd < 0) {
+	Vector2 globalMousePos = this.GetGlobalMousePosition();
+	  this.SetDirByMouse(globalMousePos);
+	  this.Shoot(this.GlobalTransform.Origin, globalMousePos);
 	}
 
 	
 
-	this.PlayAnim(this.VecToMovement(velocity), isShooting);
+	this.PlayAnim(this.VecToMovement(velocity, isShooting), isShooting);
 
 	this.Velocity = velocity;
 	MoveAndSlide();
@@ -99,43 +100,50 @@ public partial class Player : CharacterBody2D
 	  this.anim.Play("shoot");
 	  return;
 	}
-		this.anim.Play("front_" + movement);
-		// this.anim.Play(DirectionTable[(int)this.dir] + movement);
+
+	if (movement != "idle")
+	  this.anim.Play(DirectionTable[(int)this.dir] + movement);
+	else
+	  this.anim.Play("front_idle");
+	
 	}
 
-	private string VecToMovement(Vector2 vec)
+	private string VecToMovement(Vector2 vec, bool isShooting)
 	{
 		if (vec.X == 0 && vec.Y == 0)
 			return "idle";
 
-	  return "idle";
+	// undgå at opdatere this.dir hvis man skyder
+	if (isShooting)
+	  return "";
 
+		if (vec.X > 0)
+		{
+			this.dir = Direction.Right;
+			return "walk";
+		}
+		else if (vec.X < 0)
+		{
+			this.dir = Direction.Left;
+			return "walk";
+		}
 
-		// if (vec.X > 0)
-		// {
-		// 	this.dir = Direction.Right;
-		// 	return "walk";
-		// }
-		// else if (vec.X < 0)
-		// {
-		// 	this.dir = Direction.Left;
-		// 	return "walk";
-		// }
+		if (vec.Y > 0)
+		{
+			this.dir = Direction.Up;
+			return "walk";
+		}
+		else if (vec.Y < 0)
+		{
+			this.dir = Direction.Down;
+			return "walk";
+		}
 
-		// if (vec.Y > 0)
-		// {
-		// 	this.dir = Direction.Front;
-		// 	return "walk";
-		// }
-		// else if (vec.Y < 0)
-		// {
-		// 	this.dir = Direction.Back;
-		// 	return "walk";
-		// }
+	return ""; // vil aldrig ske
 
 	}
 
-  private void SetDir(Vector2 globalMousePos) {
+  private void SetDirByMouse(Vector2 globalMousePos) {
 	if ((globalMousePos.X - this.Position.X) > 0) {
 	  this.dir = Direction.Right;
 	  return;
@@ -145,56 +153,66 @@ public partial class Player : CharacterBody2D
   }
 
   private void Shoot(Vector2 startPos, Vector2 dir) {
-    this.bulletCd = BULLET_CD_RESET_TIMER;
+	this.bulletCd = BULLET_CD_RESET_TIMER;
 
-    this.skudPlayer.Play();
-    var spaceState = GetWorld2D().DirectSpaceState;
+	this.skudPlayer.Play();
+	var spaceState = GetWorld2D().DirectSpaceState;
 
-    // det her gør så man ikke kan skyde igennem generators
-    // 6 er bit mask til 2, 3 collision layers (0b110)
-    var RayQuery = PhysicsRayQueryParameters2D.Create(startPos, dir, 6);
-    var RayResult = spaceState.IntersectRay(RayQuery);
+	// det her gør så man ikke kan skyde igennem generators
+	// 6 er bit mask til 2, 3 collision layers (0b110)
+	var RayQuery = PhysicsRayQueryParameters2D.Create(startPos, dir, 6);
+	var RayResult = spaceState.IntersectRay(RayQuery);
 
-    Variant val = new();
-    StaticBody2D cbVal = val.As<StaticBody2D>();
-    RayResult.TryGetValue("collider", out val);
-    try {
-      cbVal = val.As<StaticBody2D>();
-    } catch {
-      return;
-    }
+	Variant rqVal = new();
+	StaticBody2D sbVal;
+	RayResult.TryGetValue("collider", out rqVal);
+	try {
+	  sbVal = rqVal.As<StaticBody2D>();
+	} catch {
+	  return;
+	}
 
-    if (cbVal?.HasMeta("Enemy_Hitbox") == false)
-      return;
+	if (sbVal?.HasMeta("Enemy_Hitbox") == false)
+	  return;
 
-    // det her gør så man skal have crosshair på enemy hitbox for at kunne ramme
-    // hvis man bruger raycast alene, kan man ramme selv med crosshair bag enemy
-    var PointQuery = new PhysicsPointQueryParameters2D();
-    PointQuery.Position = dir;
-    var PointResult = spaceState.IntersectPoint(PointQuery);
-    if (PointResult.Count == 0)
-      return;
-    PointResult[0].TryGetValue("collider", out val);
+	// det her gør så man skal have crosshair på enemy hitbox for at kunne ramme
+	// hvis man bruger raycast alene, kan man ramme selv med crosshair bag enemy
+	var PointQuery = new PhysicsPointQueryParameters2D();
+	PointQuery.Position = dir;
+	var PointResult = spaceState.IntersectPoint(PointQuery);
+	if (PointResult.Count == 0)
+	  return;
 
-    cbVal.GetParent().Free();
-    this.global.IncrementScore();
+	Variant pqVal = new();
+	PointResult[0].TryGetValue("collider", out pqVal);
+	try {
+	  sbVal = pqVal.As<StaticBody2D>();
+	} catch {
+	  return;
+	}
+
+	if (sbVal?.HasMeta("Enemy_Hitbox") == false)
+	  return;
+
+	sbVal.GetParent().Free();
+	this.global.IncrementScore();
   }
 
   public void Damage(int val) {
-    this.HP -= val;
+	this.HP -= val;
 
-    if (this.HP < 1)
-      global.ResetGame();
+	if (this.HP < 1)
+	  global.ResetGame();
   }
 
   private void InitCrosshairAnim() {
-    GD.Print("Initializing crosshair animation");
+	GD.Print("Initializing crosshair animation");
 
-    this.crosshairs[0] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-0.png");
-    this.crosshairs[1] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-1.png");
-    this.crosshairAnimTimer = new System.Threading.Timer((object state) => {
-      this.CallDeferred("SetMouseCursor", null);
-    }, null, 0, 300);
+	this.crosshairs[0] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-0.png");
+	this.crosshairs[1] = ResourceLoader.Load<Texture>("res://Assets/Cursors/crosshair-frame-1.png");
+	this.crosshairAnimTimer = new System.Threading.Timer((object state) => {
+	  this.CallDeferred("SetMouseCursor", null);
+	}, null, 0, 300);
   }
 
   public void SetMouseCursor() {
@@ -203,7 +221,7 @@ public partial class Player : CharacterBody2D
   }
 
   public void DestroyCrosshairAnimTimer() {
-    GD.Print("Destroying crosshair animation timer");
-    this.crosshairAnimTimer.Dispose();
+	GD.Print("Destroying crosshair animation timer");
+	this.crosshairAnimTimer.Dispose();
   }
 }

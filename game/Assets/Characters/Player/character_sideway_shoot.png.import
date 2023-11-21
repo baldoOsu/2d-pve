@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cb4f315tg7yom"
-path="res://.godot/imported/muteret_hund.png-2227ce6812de0413afdc4b6ce1d1831d.ctex"
+uid="uid://dy5k4vropgj4m"
+path="res://.godot/imported/character_sideway_shoot.png-aa9181a620b84598b5a65453a7889575.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Characters/muteret_hund.png"
-dest_files=["res://.godot/imported/muteret_hund.png-2227ce6812de0413afdc4b6ce1d1831d.ctex"]
+source_file="res://Assets/Characters/Player/character_sideway_shoot.png"
+dest_files=["res://.godot/imported/character_sideway_shoot.png-aa9181a620b84598b5a65453a7889575.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Muteret_mand : CharacterBody2D
+public partial class Muteret_hund : CharacterBody2D
 {
   private CharacterBody2D playerObj;
 
@@ -19,7 +19,7 @@ public partial class Muteret_mand : CharacterBody2D
 		Up
 	}
 	public static readonly string[] DirectionTable = { "up_", "side_", "side_", "front_" };
-	private Direction dir = Direction.Down;
+	private Direction dir = Direction.Left;
   AnimatedSprite2D anim;
 
   public override void _Ready()
@@ -36,7 +36,7 @@ public partial class Muteret_mand : CharacterBody2D
 
   PlayAnim(VecToMovement(direction));
 
-	this.Velocity = direction.Normalized() * Muteret_mand.SPEED;
+	this.Velocity = direction.Normalized() * Muteret_hund.SPEED;
 	MoveAndSlide();
 
 	if (this.currentDamageCd > 0)
@@ -51,8 +51,8 @@ public partial class Muteret_mand : CharacterBody2D
 	  KinematicCollision2D collision = GetSlideCollision(i);
 	  GodotObject collider = collision.GetCollider();
 	  if (collider.HasMethod("Damage"))  {
-		collider.CallDeferred("Damage", Muteret_mand.DAMAGE);
-		this.currentDamageCd = Muteret_mand.DAMAGE_CD;
+		collider.CallDeferred("Damage", Muteret_hund.DAMAGE);
+		this.currentDamageCd = Muteret_hund.DAMAGE_CD;
 	  }
 	}
   }
@@ -75,11 +75,7 @@ public partial class Muteret_mand : CharacterBody2D
 
   private string VecToMovement(Vector2 vec)
 	{
-		if (vec.X == 0 && vec.Y == 0)
-			return "idle";
-
     // undgå at opdatere this.dir hvis man skyder
-
     if (vec.X > 0)
     {
       this.dir = Direction.Right;
@@ -88,17 +84,6 @@ public partial class Muteret_mand : CharacterBody2D
     else if (vec.X < 0)
     {
       this.dir = Direction.Left;
-      return "walk";
-    }
-
-    if (vec.Y > 0)
-    {
-      this.dir = Direction.Up;
-      return "walk";
-    }
-    else if (vec.Y < 0)
-    {
-      this.dir = Direction.Down;
       return "walk";
     }
 

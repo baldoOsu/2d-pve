@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://mlipsep2bmyt"
-path="res://.godot/imported/muteret_menneske.png-b5a4032be59d16fdae4341afb273ee6c.ctex"
+uid="uid://b22q0l6itrow7"
+path="res://.godot/imported/player.png-3ad35d94544978bdb066e3fee29c5d97.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Characters/muteret_menneske.png"
-dest_files=["res://.godot/imported/muteret_menneske.png-b5a4032be59d16fdae4341afb273ee6c.ctex"]
+source_file="res://Assets/Characters/Player/player.png"
+dest_files=["res://.godot/imported/player.png-3ad35d94544978bdb066e3fee29c5d97.ctex"]
 
 [params]
 

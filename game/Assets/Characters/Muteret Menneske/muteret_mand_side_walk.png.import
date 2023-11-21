@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c04cwsjo6nwab"
-path="res://.godot/imported/player-sprite.png-0bd38bdf1d53d445174f8b7620e3a7cf.ctex"
+uid="uid://hb4cb5mewf5e"
+path="res://.godot/imported/muteret_mand_side_walk.png-90446471150f27ebf9ed191de1f0702a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Characters/player-sprite.png"
-dest_files=["res://.godot/imported/player-sprite.png-0bd38bdf1d53d445174f8b7620e3a7cf.ctex"]
+source_file="res://Assets/Characters/Muteret Menneske/muteret_mand_side_walk.png"
+dest_files=["res://.godot/imported/muteret_mand_side_walk.png-90446471150f27ebf9ed191de1f0702a.ctex"]
 
 [params]
 

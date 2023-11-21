@@ -1,0 +1,75 @@
+[gd_scene load_steps=10 format=3 uid="uid://8m368kup3sbl"]
+
+[ext_resource type="Script" path="res://Scripts/Enemies/Muteret_hund.cs" id="1_7bjsd"]
+[ext_resource type="Texture2D" uid="uid://cb4f315tg7yom" path="res://Assets/Characters/Muteret Hund/muteret_hund.png" id="1_qcqu6"]
+[ext_resource type="Texture2D" uid="uid://b24jv3oolp2y4" path="res://Assets/Characters/Muteret Hund/hund_side_walk.png" id="2_slba1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_is7w4"]
+atlas = ExtResource("2_slba1")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1661f"]
+atlas = ExtResource("2_slba1")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04xu1"]
+atlas = ExtResource("2_slba1")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_638fx"]
+atlas = ExtResource("2_slba1")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bueah"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qcqu6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_is7w4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1661f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_04xu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_638fx")
+}],
+"loop": true,
+"name": &"side_walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wt4s2"]
+size = Vector2(30, 10)
+
+[node name="Muteret_hund" type="CharacterBody2D"]
+collision_priority = 2.0
+script = ExtResource("1_7bjsd")
+
+[node name="Movement" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_bueah")
+animation = &"side_walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, -13)
+shape = SubResource("RectangleShape2D_wt4s2")
+
+[node name="RigidBody2D" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 4
+collision_mask = 9
+metadata/Enemy_Hitbox = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RigidBody2D"]
+position = Vector2(-2, 4)
+polygon = PackedVector2Array(-14, -5, -12, -27, 3, -28, 18, -32, 18, -17, 16, -5)
