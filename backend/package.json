@@ -15,7 +15,7 @@
     "bun-types": "^1.0.11"
   },
   "scripts": {
-    "dev": "npm run tsc && node dist/index.js",
-    "build": "npm run tsc"
+    "dev": "tsc && node dist/index.js",
+    "build": "tsc"
   }
 }
