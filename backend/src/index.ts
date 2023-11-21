@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { Client } from "pg";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import { signAccessToken, verifyAccessToken } from "./jwt";
 
