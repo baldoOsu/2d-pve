@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "KfhuwfqWguVpi++G9k14nIKKf5N8w4cofFXXzMVJWPEyDvKemcc0J9F/TIfTrlgGm72hjR/vs2erifj/SgZJ+w==",
+  "success": true,
+  "projectFilePath": "/home/baldo/dev/godot/2d-pve/2d-survival.csproj",
+  "expectedPackageFiles": [
+    "/home/baldo/.nuget/packages/godot.sourcegenerators/4.1.1/godot.sourcegenerators.4.1.1.nupkg.sha512",
+    "/home/baldo/.nuget/packages/godotsharp/4.1.1/godotsharp.4.1.1.nupkg.sha512",
+    "/home/baldo/.nuget/packages/godotsharpeditor/4.1.1/godotsharpeditor.4.1.1.nupkg.sha512",
+    "/home/baldo/.nuget/packages/microsoft.netcore.app.ref/6.0.24/microsoft.netcore.app.ref.6.0.24.nupkg.sha512",
+    "/home/baldo/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.24/microsoft.aspnetcore.app.ref.6.0.24.nupkg.sha512"
+  ],
+  "logs": []
+}
