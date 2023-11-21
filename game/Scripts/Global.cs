@@ -82,7 +82,7 @@ public partial class Global : Node
 
     GD.Print("Sending login request");
     var res = await this.client.PostAsync(
-      "http://localhost:3006/users/login",
+      "https://pve-game-api.supernovaa.dev:3006/users/login",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 
@@ -120,7 +120,7 @@ public partial class Global : Node
 
     GD.Print("Sending signup request");
     var res = await this.client.PostAsync(
-      "http://localhost:3006/users/signup",
+      "https://pve-game-api.supernovaa.dev:3006/users/signup",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 
@@ -158,7 +158,7 @@ public partial class Global : Node
 
     GD.Print("Sending highscore update request");
     var res = await this.client.PutAsync(
-      $"http://localhost:3006/users/{this.user.ID}/highscore",
+      $"https://pve-game-api.supernovaa.dev:3006/users/{this.user.ID}/highscore",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 
@@ -178,7 +178,7 @@ public partial class Global : Node
 
     GD.Print("Sending games played increment request");
     var res = await this.client.PutAsync(
-      $"http://localhost:3006/users/{this.user.ID}/inc-games-played",
+      $"https://pve-game-api.supernovaa.dev:3006/users/{this.user.ID}/inc-games-played",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 

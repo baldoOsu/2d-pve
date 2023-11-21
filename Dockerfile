@@ -13,7 +13,7 @@ COPY --from=ts-compiler /usr/app/package*.json ./
 COPY --from=ts-compiler /usr/app/dist ./dist/
 RUN npm install --only=production
 
-FROM gcr.io/distroless/nodejs18-debian11
+FROM gcr.io/distroless/nodejs21-debian11
 WORKDIR /usr/app
 COPY --from=ts-remover /usr/app ./
 USER 1000
