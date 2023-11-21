@@ -21,7 +21,10 @@ public partial class Global : Node
   private bool _gameOver = false;
 
 
-  private System.Net.Http.HttpClient client = new();
+  private System.Net.Http.HttpClient client = new()
+  {
+    BaseAddress = new("http://pve-game-api.supernovaa.dev:3006")
+  };
   public bool isLoggedIn = false;
   public User user;
 
@@ -82,7 +85,7 @@ public partial class Global : Node
 
     GD.Print("Sending login request");
     var res = await this.client.PostAsync(
-      "https://pve-game-api.supernovaa.dev:3006/users/login",
+      "/users/login",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 
@@ -120,7 +123,7 @@ public partial class Global : Node
 
     GD.Print("Sending signup request");
     var res = await this.client.PostAsync(
-      "https://pve-game-api.supernovaa.dev:3006/users/signup",
+      "/users/signup",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 
@@ -158,7 +161,7 @@ public partial class Global : Node
 
     GD.Print("Sending highscore update request");
     var res = await this.client.PutAsync(
-      $"https://pve-game-api.supernovaa.dev:3006/users/{this.user.ID}/highscore",
+      $"/users/{this.user.ID}/highscore",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 
@@ -178,7 +181,7 @@ public partial class Global : Node
 
     GD.Print("Sending games played increment request");
     var res = await this.client.PutAsync(
-      $"https://pve-game-api.supernovaa.dev:3006/users/{this.user.ID}/inc-games-played",
+      $"/users/{this.user.ID}/inc-games-played",
       new StringContent(reqContent, Encoding.UTF8, "application/json")
     );
 
