@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://d1ht101bbpcjf"]
+
+[ext_resource type="Texture2D" uid="uid://byxyn2lrdmwmh" path="res://Assets/menu_bg.png" id="1_5gs8h"]
+[ext_resource type="Texture2D" uid="uid://3ccqkam6d8p6" path="res://Assets/slider_grabber.png" id="2_dmwmc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f716p"]
+bg_color = Color(0.0392157, 0.0392157, 0.0392157, 0.847059)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="Theme" id="Theme_ksxuk"]
+Panel/styles/panel = SubResource("StyleBoxFlat_f716p")
+
+[sub_resource type="LabelSettings" id="LabelSettings_osfem"]
+font_size = 32
+outline_size = 2
+outline_color = Color(0, 1, 1, 1)
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuBg" type="Sprite2D" parent="."]
+position = Vector2(575.75, 319.75)
+scale = Vector2(1.20052, 1.00078)
+texture = ExtResource("1_5gs8h")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 640.0
+theme = SubResource("Theme_ksxuk")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 48.0
+offset_right = 403.0
+offset_bottom = 640.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Volume"
+label_settings = SubResource("LabelSettings_osfem")
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_icons/grabber = ExtResource("2_dmwmc")

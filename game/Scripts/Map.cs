@@ -1,69 +1,82 @@
 using Godot;
+using Godot.Collections;
 using System;
-using System.Data;
-using System.Threading;
+using System.Collections.Generic;
 
 public partial class Map : Node2D
 {
+	private double _enemyCd = 0;
+	private const double ENEMY_SPAWN_TIMER = 2.0;
+	private const int MAX_NUM_ENEMIES = 5; // for each spawn point
 
-  private const float ENEMY_SPAWN_DISTANCE = 200.0f;
-  private static Vector4 ENEMY_SPAWN_BOUNDARY = new(10, 25, 1142, 630);
-  private System.Threading.Timer enemySpawnTimer;
-  private PackedScene[] enemyScenes = {null, null};
   private static Random randomizer = new();
+	private List<List<Node2D>> _waypoints = new();
+	private List<int> _spawnPointsNumEnemies = new();
 
   private CharacterBody2D playerObj;
+	private PackedScene[] _enemyScenes = {null, null};
 	public override void _Ready()
 	{
-	this.playerObj = GetNode<CharacterBody2D>("./Player");
-	this.enemyScenes[0] = GD.Load<PackedScene>("res://Scenes/Enemies/Muteret_mand.tscn");
-  this.enemyScenes[1] = GD.Load<PackedScene>("res://Scenes/Enemies/Muteret_hund.tscn");
-  
+		this.playerObj = GetNode<CharacterBody2D>("./Player");
+		Node2D spawnPointsRoot = GetNode<Node2D>("./Waypoints");
+		_enemyScenes[0] = GD.Load<PackedScene>("res://Scenes/Enemies/Muteret_mand.tscn");
+  	_enemyScenes[1] = GD.Load<PackedScene>("res://Scenes/Enemies/Muteret_hund.tscn");
 
-	this.InitiateEnemySpawnTimer();
+		List<Node2D> spawnPoints = new();
+		
+		Array<Node> children = spawnPointsRoot.GetChildren();
+		for (int i = 0; i < children.Count; i++)
+		{
+			if (children[i] is Node2D c) {
+				spawnPoints.Add(c);
+				_waypoints.Add(new());
+				_spawnPointsNumEnemies.Add(0);
+			}
+
+			foreach (Node waypoint in children[i].GetChildren())
+			{
+				if (waypoint is Node2D d)
+					_waypoints[i].Add(d);
+			}
+		}
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		_enemyCd -= delta;
+		if (_enemyCd <= 0) {
+	  	SpawnEnemy();
+			_enemyCd = ENEMY_SPAWN_TIMER;
+		}
 	}
 
 
-  private void InitiateEnemySpawnTimer() {
-	GD.Print("Initializing enemy spawn timer");
-	  this.enemySpawnTimer = new System.Threading.Timer(this.SpawnEnemy, this.playerObj, 0, 500);
-  }
+	private void SpawnEnemy() {
+		List<List<Node2D>> nonFullSpawnPoints = new();
+		for (int i = 0; i < _waypoints.Count; i++) {
+			if (_spawnPointsNumEnemies[i] > MAX_NUM_ENEMIES)
+				continue;
 
-  private void SpawnEnemy(object obj) {
-	CharacterBody2D playerObj = obj as CharacterBody2D;
-	Vector2 playerPos = playerObj.GetPositionDelta();
-	playerPos = new Vector2(-playerPos.X, -playerPos.Y);
+			nonFullSpawnPoints.Add(_waypoints[i]);
+			_spawnPointsNumEnemies[i]++;
+		}
 
-	Vector2 spawnPoint = this.GetSpawnPoint(playerPos);
-	  
-	Node2D instance = (Node2D)this.enemyScenes[randomizer.Next(0, 2)].Instantiate();
-	instance.Position = spawnPoint;
+		if (nonFullSpawnPoints.Count == 0)
+			return;
 
-	this.CallDeferred("add_child", instance);
-  }
+		int spawnPointIdx = randomizer.Next(0, nonFullSpawnPoints.Count);
+		List<Node2D> waypoints = nonFullSpawnPoints[spawnPointIdx];
 
-  private Vector2 GetSpawnPoint(Vector2 playerPos) {
-	double v = randomizer.NextDouble() * 2 * Math.PI;
-	
-	Vector2 spawnPoint = new Vector2(playerPos.X + ENEMY_SPAWN_DISTANCE * (float)Math.Cos(v), playerPos.Y + ENEMY_SPAWN_DISTANCE * (float)Math.Sin(v));
+		GD.Print("Spawning enemy!");
+		Enemy instance = (Enemy)_enemyScenes[randomizer.Next(0, 2)].Instantiate();
+		instance.Initialize(waypoints);
+		instance.Position = waypoints[0].GlobalPosition;
 
-
-	if (spawnPoint.X < ENEMY_SPAWN_BOUNDARY.X)
-	  spawnPoint.X = ENEMY_SPAWN_BOUNDARY.X;
-	else if (spawnPoint.X > ENEMY_SPAWN_BOUNDARY.Z)
-	  spawnPoint.X = ENEMY_SPAWN_BOUNDARY.Z;
-	
-	if (spawnPoint.Y < ENEMY_SPAWN_BOUNDARY.Y)
-	  spawnPoint.Y = ENEMY_SPAWN_BOUNDARY.Y;
-	else if (spawnPoint.Y > ENEMY_SPAWN_BOUNDARY.W)
-	  spawnPoint.Y = ENEMY_SPAWN_BOUNDARY.W;
-
-	return spawnPoint;
+		AddChild(instance);
   }
 
   public void DestroyEnemySpawnTimer() {
 	GD.Print("Destroying enemy respawn timer");
-	this.enemySpawnTimer.Dispose();
   }
 
 }

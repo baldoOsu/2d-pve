@@ -1,9 +1,94 @@
-[gd_scene load_steps=5 format=3 uid="uid://g4l8w3gaoxa0"]
+[gd_scene load_steps=19 format=3 uid="uid://g4l8w3gaoxa0"]
 
 [ext_resource type="Script" path="res://Scripts/UI/Menu.cs" id="1_krftg"]
 [ext_resource type="Script" path="res://Scripts/UI/Play.cs" id="1_nxvcm"]
 [ext_resource type="Script" path="res://Scripts/UI/Goto_Login.cs" id="2_45it0"]
+[ext_resource type="Texture2D" uid="uid://byxyn2lrdmwmh" path="res://Assets/menu_bg.png" id="2_y1m5f"]
+[ext_resource type="Texture2D" uid="uid://ckoagyanh2hmt" path="res://Assets/menu_bg_128x128.png" id="3_dbdvq"]
 [ext_resource type="Script" path="res://Scripts/UI/Goto_Signup.cs" id="4_ef7jb"]
+[ext_resource type="Script" path="res://Scripts/UI/Quit.cs" id="7_oij6q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f716p"]
+bg_color = Color(0.0392157, 0.0392157, 0.0392157, 0.847059)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="Theme" id="Theme_juhcr"]
+Panel/styles/panel = SubResource("StyleBoxFlat_f716p")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hu6da"]
+bg_color = Color(0.129412, 0.682353, 0.0862745, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 1, 0, 1)
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_60w6b"]
+bg_color = Color(0.129412, 0.682353, 0.0862745, 1)
+border_width_bottom = 2
+border_color = Color(0.129412, 0.505882, 0.0862745, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_g6c2b"]
+Button/styles/hover = SubResource("StyleBoxFlat_hu6da")
+Button/styles/normal = SubResource("StyleBoxFlat_60w6b")
+Button/styles/pressed = SubResource("StyleBoxFlat_60w6b")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rp454"]
+bg_color = Color(0.160784, 0.145098, 0.188235, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.305882, 0.278431, 0.360784, 1)
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1svp"]
+bg_color = Color(0.160784, 0.145098, 0.188235, 1)
+border_width_bottom = 2
+border_color = Color(0.133333, 0.117647, 0.168627, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_vabjq"]
+Button/styles/hover = SubResource("StyleBoxFlat_rp454")
+Button/styles/normal = SubResource("StyleBoxFlat_n1svp")
+Button/styles/pressed = SubResource("StyleBoxFlat_n1svp")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs5yw"]
+bg_color = Color(0.756863, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(1, 0, 0, 1)
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eymmo"]
+bg_color = Color(0.815686, 0, 0, 1)
+border_width_bottom = 2
+border_color = Color(1, 0, 0, 0.6)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 5
+shadow_color = Color(1, 0, 0, 0.6)
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="Theme" id="Theme_on2nb"]
+Button/styles/hover = SubResource("StyleBoxFlat_hs5yw")
+Button/styles/normal = SubResource("StyleBoxFlat_eymmo")
+Button/styles/pressed = SubResource("StyleBoxFlat_eymmo")
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -14,6 +99,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_krftg")
 
+[node name="MenuBg" type="Sprite2D" parent="."]
+position = Vector2(575.75, 320.75)
+scale = Vector2(1.20052, 0.997656)
+texture = ExtResource("2_y1m5f")
+
+[node name="MenuBg128x128" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(578, 320)
+scale = Vector2(3.6125, 3)
+texture = ExtResource("3_dbdvq")
+
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -22,11 +118,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -120.0
-offset_top = -160.0
-offset_right = 120.0
-offset_bottom = 160.0
+offset_top = -177.0
+offset_right = 117.0
+offset_bottom = 174.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_juhcr")
 
 [node name="BtnsMargin" type="MarginContainer" parent="."]
 layout_mode = 0
@@ -44,6 +141,7 @@ alignment = 1
 [node name="Play" type="Button" parent="BtnsMargin/BtnsVBox"]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
+theme = SubResource("Theme_g6c2b")
 text = "Play"
 icon_alignment = 1
 script = ExtResource("1_nxvcm")
@@ -52,6 +150,7 @@ script = ExtResource("1_nxvcm")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
+theme = SubResource("Theme_vabjq")
 text = "Log In"
 script = ExtResource("2_45it0")
 
@@ -59,5 +158,21 @@ script = ExtResource("2_45it0")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
+theme = SubResource("Theme_vabjq")
 text = "Sign Up"
 script = ExtResource("4_ef7jb")
+
+[node name="Settings" type="Button" parent="BtnsMargin/BtnsVBox"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme = SubResource("Theme_vabjq")
+text = "Settings"
+
+[node name="Quit" type="Button" parent="BtnsMargin/BtnsVBox"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme = SubResource("Theme_on2nb")
+text = "Quit
+"
+icon_alignment = 1
+script = ExtResource("7_oij6q")

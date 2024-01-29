@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Net.Http.Headers;
+using System.Collections.Generic;
 
 public partial class Global : Node
 {
@@ -64,7 +65,6 @@ public partial class Global : Node
     // det er nødvendigt at afslutte delegate tråde, ellers vil de køre videre med slettede referencer
     // som hænger og crasher spillet efter restart
     GetNode<Player>("/root/Root/Map/Player").CallDeferred("DestroyCrosshairAnimTimer", null);
-    GetNode<Map>("/root/Root/Map").CallDeferred("DestroyEnemySpawnTimer", null);
     this.scoreLabel = null;
 
     this.ResetScore();

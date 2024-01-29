@@ -196,3 +196,83 @@ layer_3/tile_data = PackedInt32Array(131076, 458753, 0, 196612, 458753, 1, 26214
 
 [node name="Player" parent="." instance=ExtResource("2_t77qe")]
 position = Vector2(554, 331)
+
+[node name="Waypoints" type="Node2D" parent="."]
+visible = false
+
+[node name="1" type="Node2D" parent="Waypoints"]
+
+[node name="Node2D" type="Node2D" parent="Waypoints/1"]
+position = Vector2(30, 29)
+
+[node name="Node2D4" type="Node2D" parent="Waypoints/1"]
+position = Vector2(355, 63)
+
+[node name="Node2D5" type="Node2D" parent="Waypoints/1"]
+position = Vector2(177, 171)
+
+[node name="Node2D3" type="Node2D" parent="Waypoints/1"]
+position = Vector2(340, 207)
+
+[node name="Node2D2" type="Node2D" parent="Waypoints/1"]
+position = Vector2(129, 380)
+
+[node name="2" type="Node2D" parent="Waypoints"]
+position = Vector2(550, 89)
+
+[node name="Node2D4" type="Node2D" parent="Waypoints/2"]
+position = Vector2(265, 12)
+
+[node name="Node2D" type="Node2D" parent="Waypoints/2"]
+position = Vector2(253, 254)
+
+[node name="Node2D3" type="Node2D" parent="Waypoints/2"]
+position = Vector2(127, 117)
+
+[node name="Node2D2" type="Node2D" parent="Waypoints/2"]
+position = Vector2(3, 237)
+
+[node name="3" type="Node2D" parent="Waypoints"]
+position = Vector2(256, 327)
+
+[node name="Node2D4" type="Node2D" parent="Waypoints/3"]
+position = Vector2(265, 12)
+
+[node name="Node2D" type="Node2D" parent="Waypoints/3"]
+position = Vector2(253, 254)
+
+[node name="Node2D3" type="Node2D" parent="Waypoints/3"]
+position = Vector2(127, 117)
+
+[node name="Node2D2" type="Node2D" parent="Waypoints/3"]
+position = Vector2(3, 237)
+
+[node name="4" type="Node2D" parent="Waypoints"]
+position = Vector2(854, 358)
+
+[node name="Node2D4" type="Node2D" parent="Waypoints/4"]
+position = Vector2(265, 12)
+
+[node name="Node2D" type="Node2D" parent="Waypoints/4"]
+position = Vector2(253, 254)
+
+[node name="Node2D3" type="Node2D" parent="Waypoints/4"]
+position = Vector2(127, 117)
+
+[node name="Node2D2" type="Node2D" parent="Waypoints/4"]
+position = Vector2(3, 237)
+
+[node name="5" type="Node2D" parent="Waypoints"]
+position = Vector2(396, 361)
+
+[node name="Node2D4" type="Node2D" parent="Waypoints/5"]
+position = Vector2(265, 12)
+
+[node name="Node2D" type="Node2D" parent="Waypoints/5"]
+position = Vector2(253, 254)
+
+[node name="Node2D3" type="Node2D" parent="Waypoints/5"]
+position = Vector2(127, 117)
+
+[node name="Node2D2" type="Node2D" parent="Waypoints/5"]
+position = Vector2(3, 237)
